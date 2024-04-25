@@ -8,6 +8,9 @@ const Product = db.define('tb_product', {
     description: {
         type: DataTypes.STRING
     },
+    price: {
+        type: DataTypes.FLOAT
+    },
     image_1: {
         type: DataTypes.STRING
     },
@@ -27,3 +30,5 @@ const Product = db.define('tb_product', {
         type: DataTypes.INTEGER
     }
 })
+
+export default Product;

@@ -71,6 +71,91 @@ export const createUser = async( req, res = response ) => {
 }
 
 
+export const login = async( req, res = response ) => {
+
+    const { email, password } = req.body;
+
+    try {
+        
+        const user = await User.findOne({
+            where: {
+                email
+            }
+        })
+
+        if ( !user ) {
+            return res.status(200).json({
+                ok: false,
+                msg: `El correo electrónico ${email} no existe.`
+            })
+        }
+
+        if ( password != user.password ) {
+            return res.status(200).json({
+                ok: false,
+                msg: `La contraseña es incorrecta.`
+            })
+        }
+
+        const token = await generateToken( user.dataValues.id, user.dataValues.name );
+
+        res.status(200).json({
+            ok: true,
+            user,
+            token
+        })
+        
+    } catch (error) {
+        console.log( error );
+        res.status(400).json({
+            ok: false,
+            msg: 'Error al iniciar sesión'
+        })
+    }
+}
+
+
+export const logout = async( req, res = response ) => {
+
+    try {
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Se ha cerrado sesión'
+        })
+        
+    } catch ( error ) {
+        console.log( error );
+        res.status(400).json({
+            ok: false,
+            msg: 'Error al cerrar sesión'
+        })
+    }
+}
+
+
+export const renewToken = async( req, res = response ) => {
+
+    const { id, name } = req;
+
+    const user = await User.findByPk( id );
+
+    if ( !user ) {
+        res.status(200).json({
+            ok: false,
+            msg: 'El usuario no existe.'
+        })
+    }
+
+    return res.json({
+        ok: true,
+        msg: 'Token validado'
+    })
+
+
+}
+
+
 export const updateUser = async( req, res = response ) => {
 
     const { id, name, lastName, email, password, address } = req.body;
