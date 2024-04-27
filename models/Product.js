@@ -11,6 +11,9 @@ const Product = db.define('tb_product', {
     price: {
         type: DataTypes.FLOAT
     },
+    categorie: {
+        type: DataTypes.STRING
+    },
     image_1: {
         type: DataTypes.STRING
     },
